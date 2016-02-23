@@ -23,6 +23,7 @@ namespace DrawLineOnmouse
 		private static IList<Point> CurrentPointsList = new List<Point>();
 		private Dictionary<Point, Point> PointDictionary = new Dictionary<Point, Point>();
 
+
 		//public Form1()
 		//{
 		//	PointDictionary.Add(new Point { X = 10, Y = 10 }, new Point { X = 85, Y = 85 });
@@ -94,53 +95,52 @@ namespace DrawLineOnmouse
 		public bool IsIntersects(Point a, Point b)
 		{
 			//List<Point> allPointsList = GetAllPointsForPreviousDrawnLines();
-			int x1, y1, x2, y2;
-			x1 = 10;
-			y1 = 10;
-			x2 = 85;
-			y2 = 85;
-
+			List<Point> pointListsForDrawnLine=new List<Point>();
 
 			foreach (var line in PointDictionary)
 			{
-
-			
-			var lineConstantValues = GetLineEquationConstants(line.Key,line.Value);
-			var m = lineConstantValues[0];
-			var c = lineConstantValues[1];
-			//equation of existing line: y-mx-c=0 for all points on the line
-			var pointListsForDrawnLine = GetAllPointsForDrawnLines(a, b);
-			var lineConstantValues1 = GetLineEquationConstants(a, b);
-			var m1 = lineConstantValues1[0];
-			var c1 = lineConstantValues1[1];
-
-
-			for (int i = a.X; i < b.X; i++)
-			{
-				if (((Convert.ToDouble(i) * m1 + c1) == (Convert.ToDouble(i) * m) + c))
+				int x1, y1, x2, y2;
+				if ((line.Key.X - line.Value.X) > (b.X - a.X))
 				{
-					return true;
+					x1 = line.Key.X;
+					y1 = line.Key.Y;
+					x2 = line.Value.X;
+					y2 = line.Value.Y;
+					pointListsForDrawnLine = GetAllPointsForDrawnLines(a, b);
+
+				}
+				else
+				{
+					x1 = a.X;
+					y1 = a.Y;
+					x2 = b.X;
+					y2 = b.Y;
+					//pointListsForDrawnLine = GetAllPointsForDrawnLines(new Point(line.Key.X,line.Key.Y),new Point(line.Value.X,line.Value.Y));
+					pointListsForDrawnLine = GetAllPointsForDrawnLines(a, b);
+
+				}
+			
+			//var lineConstantValues = GetLineEquationConstants(new Point(x1,y1),new Point(x2,y2));
+			//var m = lineConstantValues[0];
+			//var c = lineConstantValues[1];
+			//equation of existing line: y-mx-c=0 for all points on the line
+			//var lineConstantValues1 = GetLineEquationConstants(a, b);
+			//var m1 = lineConstantValues1[0];
+			//var c1 = lineConstantValues1[1];
+
+			for (int i = x1; i <x2; i++)
+			{
+				for (int j = y1; j < y2; j++)
+				{
+					if (pointListsForDrawnLine.Contains(new Point(i,j)))
+					{
+						return true;
+					}
 				}
 			}
 			}
 
-			//foreach (var p in pointListsForDrawnLine)
-			//{
-			//	var result = p.Y - (m*p.X) - c;
-			//	if (result== 0)
-			//	{
-			//		return true;
-			//	}
-			//}
-
-			//foreach (var p in pointListsForDrawnLine)
-			//{
-			//	var result = p.X - (m * p.Y) - c;
-			//	if (result<=0)
-			//	{
-			//		return true;
-			//	}
-			//}
+			
 			return false;
 		}
 
@@ -149,10 +149,18 @@ namespace DrawLineOnmouse
 			var constantArray = new double[2];
 
 			// following y=mx+c equation where m=(change in y)/(change in x) and c=y-mx for any point on the line
-
-			var m =(a.Y - b.Y)/(a.X - b.X);
+			double m;
+			if ((a.X - b.X)!=0)
+			{
+			 m = (a.Y - b.Y)/(a.X - b.X);
+				
+			}
+			else
+			{
+				m = 0;
+			}
 			constantArray[0] = m;
-			var c = a.Y - (m*a.X);
+			double c = a.Y - (m*a.X);
 			constantArray[1] = c;
 			return constantArray;
 		}

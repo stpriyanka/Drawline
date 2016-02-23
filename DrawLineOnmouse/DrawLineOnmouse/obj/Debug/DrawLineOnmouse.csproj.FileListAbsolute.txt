@@ -9,7 +9,6 @@ c:\users\priyanka\documents\visual studio 2013\Projects\DrawLineOnmouse\DrawLine
 C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\DrawLineOnmouse\DrawLineOnmouse\bin\Debug\DrawLineOnmouse.exe.config
 C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\DrawLineOnmouse\DrawLineOnmouse\bin\Debug\DrawLineOnmouse.exe
 C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\DrawLineOnmouse\DrawLineOnmouse\bin\Debug\DrawLineOnmouse.pdb
-C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\DrawLineOnmouse\DrawLineOnmouse\obj\Debug\DrawLineOnmouse.csprojResolveAssemblyReference.cache
 C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\DrawLineOnmouse\DrawLineOnmouse\obj\Debug\DrawLineOnmouse.Properties.Resources.resources
 C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\DrawLineOnmouse\DrawLineOnmouse\obj\Debug\DrawLineOnmouse.csproj.GenerateResource.Cache
 C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\DrawLineOnmouse\DrawLineOnmouse\obj\Debug\DrawLineOnmouse.exe
