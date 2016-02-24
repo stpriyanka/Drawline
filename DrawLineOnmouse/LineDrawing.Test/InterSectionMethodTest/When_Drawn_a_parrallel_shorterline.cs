@@ -10,16 +10,16 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace LineDrawing.Test.InterSectionMethodTest
 {
 	[TestClass]
-	public class When_Drawn_a_non_overlapping_shorterline
+	public class When_Drawn_a_parrallel_shorterline
 	{
 		[TestMethod]
 		public void TestMethod1()
 		{
 			//Arrange
-			var A = new Point(100, 100);
-			var B = new Point(350, 350);
-			var C = new Point(20, 25);
-			var D = new Point(15, 25);
+			var A = new Point(2, 3);
+			var B = new Point(6, 7);
+			var C = new Point(2, 2);
+			var D = new Point(6, 6);
 
 			//Actual
 			var form1 = new Form1();

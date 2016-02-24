@@ -59,6 +59,7 @@
     <Compile Include="InterSectionMethodTest\When_Drawn_a_non_overlapping_shorterline.cs" />
     <Compile Include="InterSectionMethodTest\When_Drawn_a_overlapping_longerline.cs" />
     <Compile Include="InterSectionMethodTest\When_Drawn_a_overlapping_shorterline.cs" />
+    <Compile Include="InterSectionMethodTest\When_Drawn_a_parrallel_shorterline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

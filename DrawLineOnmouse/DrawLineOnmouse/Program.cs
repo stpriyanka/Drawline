@@ -19,16 +19,9 @@ namespace DrawLineOnmouse
 			Application.Run(new Form1());
 		}
 
-		//private Point _setPointA, _setPointB;
 		private static IList<Point> CurrentPointsList = new List<Point>();
 		public Dictionary<Point, Point> PointDictionary = new Dictionary<Point, Point>();
 
-
-		//public Form1()
-		//{
-		//	PointDictionary.Add(new Point { X = 10, Y = 10 }, new Point { X = 35, Y = 35 });
-		//	PointDictionary.Add(new Point { X = 20, Y = 25 }, new Point { X = 25, Y = 30 });
-		//}
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
@@ -66,16 +59,17 @@ namespace DrawLineOnmouse
 			base.OnPaint(e);
 			CurrentPointsList.Clear();
 		}
+
 		private void AddPointToCurrentList(Point pointClicked)
 		{
-
 			CurrentPointsList.Add(pointClicked);
 		}
+
 		public bool IsIntersects(Point a, Point b)
 		{
-			//List<Point> allPointsList = GetAllPointsForPreviousDrawnLines();
 			List<Point> pointListsForDrawnLine = new List<Point>();
-
+			
+			bool isintersects = false;
 			foreach (var line in PointDictionary)
 			{
 				int x1, y1, x2, y2;
@@ -86,13 +80,12 @@ namespace DrawLineOnmouse
 					y1 = line.Key.Y;
 					x2 = line.Value.X;
 					y2 = line.Value.Y;
-					var constants = GetLineEquationConstants(line.Key,line.Value);
-					m = constants[0];
-					c = constants[1];
 
+					if (IsLinesParallel(line.Key, line.Value, a, b))
+					{
+						return false;
+					}
 					pointListsForDrawnLine = GetAllPointsForDrawnLines(a, b);
-
-					
 				}
 				else
 				{
@@ -100,90 +93,34 @@ namespace DrawLineOnmouse
 					y1 = a.Y;
 					x2 = b.X;
 					y2 = b.Y;
-					var constants = GetLineEquationConstants(a,b);
-					m = constants[0];
-					c = constants[1];
-					//pointListsForDrawnLine = GetAllPointsForDrawnLines(new Point(line.Key.X,line.Key.Y),new Point(line.Value.X,line.Value.Y));
-					
+					if (IsLinesParallel(line.Key, line.Value, a, b))
+					{
+						return false;
+					}
 					pointListsForDrawnLine = GetAllPointsForDrawnLines(line.Key, line.Value);
-					
 				}
 
-				foreach (var p in pointListsForDrawnLine)
+				if (x1 < x2 && y1 < y2)
 				{
-					//
-					var x = p.Y - p.X*m - c;
-					if (Equals(x, 0.0))
-					{
-						return true;
-					}
-				}
-				if (x1 < x2 && y1<y2)
-				{
-					for (int i = x1; i <= x2; i++)
-					{
-						for (int j = y1; j <= y2; j++)
-						{
-							if (pointListsForDrawnLine.Contains(new Point(i, j)))
-							{
-								return true;
-							}
-						}
-					}
-
+					isintersects = Sorting(x2, x1, y2, y1, pointListsForDrawnLine);
 				}
 				else if (x1 > x2 && y1 < y2)
 				{
-					for (int i = x2; i <= x1; i++)
-					{
-						for (int j = y1; j <= y2; j++)
-						{
-							if (pointListsForDrawnLine.Contains(new Point(i, j)))
-							{
-								return true;
-							}
-						}
-					}
+					isintersects = Sorting(x1, x2, y2, y1, pointListsForDrawnLine);
 				}
 				else if (x1 < x2 && y2 < y1)
 				{
-					for (int i = x1; i <= x2; i++)
-					{
-						for (int j = y2; j <= y1; j++)
-						{
-							if (pointListsForDrawnLine.Contains(new Point(i, j)))
-							{
-								return true;
-							}
-						}
-					}
+					isintersects = Sorting(x2, x1, y1, y2, pointListsForDrawnLine);
+
 				}
 				else if (x1 > x2 && y2 < y1)
 				{
-					for (int i = x2; i <= x1; i++)
-					{
-						for (int j = y2; j <= y1; j++)
-						{
-							if (pointListsForDrawnLine.Contains(new Point(i, j)))
-							{
-								return true;
-							}
-						}
-					}
+					isintersects = Sorting(x1, x2, y1, y2, pointListsForDrawnLine);
+
+				}
 				}
 
-				//var lineConstantValues = GetLineEquationConstants(new Point(x1,y1),new Point(x2,y2));
-				//var m = lineConstantValues[0];
-				//var c = lineConstantValues[1];
-				//equation of existing line: y-mx-c=0 for all points on the line
-				//var lineConstantValues1 = GetLineEquationConstants(a, b);
-				//var m1 = lineConstantValues1[0];
-				//var c1 = lineConstantValues1[1];
-
-				
-			}
-
-			return false;
+			return isintersects;
 		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 		public double[] GetLineEquationConstants(Point a, Point b)
 		{
@@ -191,7 +128,6 @@ namespace DrawLineOnmouse
 
 			// following y=mx+c equation where m=(change in y)/(change in x) and c=y-mx for any point on the line
 			double m = (double)(a.Y - b.Y) / (double)(a.X - b.X);
-			
 			constantArray[0] = m;
 			double c = Convert.ToDouble(a.Y - (m * Convert.ToDouble(a.X)));
 			constantArray[1] = c;
@@ -208,10 +144,19 @@ namespace DrawLineOnmouse
 				for (int i = p.X; i <= q.X; i++)
 				{
 					var y = m * i + c;
+					int y1=0;
+					try
+					{
+						y1 = Convert.ToInt32(y);
+					}
+					catch (Exception e)
+					{
+						throw new Exception("can not convert to int for {0}",e.InnerException);
+					}
 					pointlist.Add(new Point
 					{
 						X = i,
-						Y = Convert.ToInt32(y)
+						Y = y1
 					});
 				}
 
@@ -221,16 +166,51 @@ namespace DrawLineOnmouse
 				for (int i = q.X; i <= p.X; i++)
 				{
 					var y = m * i + c;
+					int y1=0;
+					try
+					{
+						y1 = Convert.ToInt32(y);
+					}
+					catch (Exception e)
+					{
+						throw new Exception("can not convert to int for {0}",e.InnerException);
+					}
 					pointlist.Add(new Point
 					{
 						X = i,
-						Y = Convert.ToInt32(y)
+						Y = y1
 					});
 				}
 			}
-			return pointlist;
+			return pointlist.OrderByDescending(r=>r.X).ToList();
 		}
 
+		private bool Sorting(int upperX, int lowerX, int upperY, int lowerY, List<Point> pointListsForDrawnLine)
+		{
+			for (int i = lowerX; i <= upperX; i++)
+			{
+				for (int j = lowerY; j <= upperY; j++)
+				{
+					if (pointListsForDrawnLine.Contains(new Point(i, j)))
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		private bool IsLinesParallel(Point a,Point b,Point p,Point q)
+		{
+			var constants1 = GetLineEquationConstants(a, b);
+			var constants2 = GetLineEquationConstants(p, q);
+
+			if (((double)constants1[0] - (double)constants2[0])==0)
+			{
+				return true;
+			}
+			return false;
+		}
 	}
 
 
