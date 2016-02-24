@@ -183,25 +183,17 @@ namespace DrawLineOnmouse
 				
 			}
 
-
 			return false;
-		}
+		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 		public double[] GetLineEquationConstants(Point a, Point b)
 		{
 			var constantArray = new double[2];
 
 			// following y=mx+c equation where m=(change in y)/(change in x) and c=y-mx for any point on the line
-			double m;
-			if (a.X > b.X)
-			{
-				m = (double)(a.Y - b.Y) / (a.X - b.X);
-			}
-			else
-			{
-				m = 1;
-			}
+			double m = (double)(a.Y - b.Y) / (double)(a.X - b.X);
+			
 			constantArray[0] = m;
-			double c = a.Y - (m * a.X);
+			double c = Convert.ToDouble(a.Y - (m * Convert.ToDouble(a.X)));
 			constantArray[1] = c;
 			return constantArray;
 		}

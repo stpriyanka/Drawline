@@ -16,10 +16,10 @@ namespace LineDrawing.Test.InterSectionMethodTest
 		public void TestMethod1()
 		{
 			//Arrange
-			var A = new Point(10, 10);
-			var B = new Point(15, 15);
-			var C = new Point(11, 11);
-			var D = new Point(5, 23);
+			var A = new Point(1, 5);
+			var B = new Point(5, 1);
+			var C = new Point(1, 1);
+			var D = new Point(8, 8);
 
 			//Actual
 			var form1 = new Form1();

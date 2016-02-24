@@ -5,3 +5,10 @@ C:\Arif_Git\Drawline_pri\DrawLineOnmouse\LineDrawing.Test\bin\Debug\DrawLineOnmo
 C:\Arif_Git\Drawline_pri\DrawLineOnmouse\LineDrawing.Test\obj\Debug\LineDrawing.Test.csprojResolveAssemblyReference.cache
 C:\Arif_Git\Drawline_pri\DrawLineOnmouse\LineDrawing.Test\obj\Debug\LineDrawing.Test.dll
 C:\Arif_Git\Drawline_pri\DrawLineOnmouse\LineDrawing.Test\obj\Debug\LineDrawing.Test.pdb
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\DrawLineOnmouse\LineDrawing.Test\bin\Debug\LineDrawing.Test.dll
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\DrawLineOnmouse\LineDrawing.Test\bin\Debug\LineDrawing.Test.pdb
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\DrawLineOnmouse\LineDrawing.Test\bin\Debug\DrawLineOnmouse.exe
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\DrawLineOnmouse\LineDrawing.Test\bin\Debug\DrawLineOnmouse.pdb
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\DrawLineOnmouse\LineDrawing.Test\obj\Debug\LineDrawing.Test.csprojResolveAssemblyReference.cache
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\DrawLineOnmouse\LineDrawing.Test\obj\Debug\LineDrawing.Test.dll
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\DrawLineOnmouse\LineDrawing.Test\obj\Debug\LineDrawing.Test.pdb

@@ -16,8 +16,8 @@ namespace LineDrawing.Test.ConstantValueTests
 		public void TestMethod1()
 		{
 			//Arrange
-			var A = new Point(85, 85);
-			var B = new Point(10, 10);
+			var A = new Point(6, 7);
+			var B = new Point(2, 2);
 
 			//Actual
 			var form1 = new Form1();
@@ -25,9 +25,9 @@ namespace LineDrawing.Test.ConstantValueTests
 			var allpoints = form1.GetAllPointsForDrawnLines(A, B);
 
 			//Assert
-			Assert.AreEqual(1, constantvalue[0]);
-			Assert.AreEqual(0, constantvalue[1]);
-			Assert.AreEqual(76, allpoints.Count);
+			Assert.AreEqual(1.25, constantvalue[0]);
+			Assert.AreEqual(-.5, constantvalue[1]);
+			Assert.AreEqual(5, allpoints.Count);
 
 		}
 	}
