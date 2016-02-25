@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Calculation.cs" />
     <Compile Include="GpsGate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -56,6 +57,8 @@
     <Compile Include="GpsGateForm.Designer.cs">
       <DependentUpon>GpsGateForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ICalculationSettings.cs" />
+    <Compile Include="IPointLists.cs" />
     <Compile Include="LineEquation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

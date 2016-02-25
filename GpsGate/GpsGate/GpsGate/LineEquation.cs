@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 
 namespace GpsGate
@@ -15,7 +16,10 @@ namespace GpsGate
 		public Point OtherLIneEnd { get; set; }
 		public int LengthOfClickedLine { get; set; }
 		public int LengthOfPreviousLine { get; set; }
-
+		public double mClickedline { get; set; }
+		public double cClickedline { get; set; }
+		public double mPreviousline { get; set; }
+		public double cPreviousline { get; set; }
 		public LineEquation(Point x1, Point y1, Point x2, Point y2)
 		{
 			Start = x1;
@@ -29,23 +33,30 @@ namespace GpsGate
 
 		public bool GetIntersectionWithLine()
 		{
-			var mClickedline = GetLineEquationConstants(Start, End)[0];
-			var cClickedline = GetLineEquationConstants(Start, End)[1];
-			var mPreviousline = GetLineEquationConstants(OtherLIneStart, OtherLIneEnd)[0];
-			var cPreviousline = GetLineEquationConstants(OtherLIneStart, OtherLIneEnd)[1];
-			var allPoints = new List<Point>();
-		
+			mClickedline = GetLineEquationConstants(Start, End)[0];
+			cClickedline = GetLineEquationConstants(Start, End)[1];
+			mPreviousline = GetLineEquationConstants(OtherLIneStart, OtherLIneEnd)[0];
+			cPreviousline = GetLineEquationConstants(OtherLIneStart, OtherLIneEnd)[1];
+
 
 			if (LengthOfClickedLine > LengthOfPreviousLine)
 			{
+				if (Start.Y > End.Y)
+				{
+					Sorting(End.X, Start.X, Start.Y, End.Y);
+				}
+				else
+				{
+					Sorting(End.X, Start.X, End.Y, Start.Y);
 
+				}
 				for (int i = Start.X; i < End.X; i++)
 				{
-					if (Start.Y<End.Y)
+					if (Start.Y < End.Y)
 					{
 						for (int j = Start.Y; j < End.Y; j++)
 						{
-							if (((int)(j - (mClickedline * i) - cClickedline) - (int)(j - (mPreviousline * i) - cPreviousline)) == 0)
+							if (Math.Abs(((j - mClickedline * i - cClickedline) - (j - (mPreviousline * i) - cPreviousline))) < 0)
 							{
 								return true;
 							}
@@ -55,7 +66,7 @@ namespace GpsGate
 					{
 						for (int j = End.Y; j < Start.Y; j++)
 						{
-							if (((int)(j - (mClickedline * i) - cClickedline) - (int)(j - (mPreviousline * i) - cPreviousline)) == 0)
+							if (Math.Abs(((j - mClickedline * i - cClickedline) - (j - (mPreviousline * i) - cPreviousline))) < 0)
 							{
 								return true;
 							}
@@ -71,7 +82,7 @@ namespace GpsGate
 					{
 						for (int j = OtherLIneStart.Y; j < OtherLIneEnd.Y; j++)
 						{
-							if (((int)(j - (mClickedline * i) - cClickedline) - (int)(j - (mPreviousline * i) - cPreviousline)) == 0)
+							if (Math.Abs(((j - mClickedline * i - cClickedline) - (j - (mPreviousline * i) - cPreviousline))) < 0)
 							{
 								return true;
 							}
@@ -81,7 +92,7 @@ namespace GpsGate
 					{
 						for (int j = OtherLIneEnd.Y; j < OtherLIneStart.Y; j++)
 						{
-							if (((int)(j - (mClickedline * i) - cClickedline) - (int)(j - (mPreviousline * i) - cPreviousline)) == 0)
+							if (Math.Abs(((j - mClickedline * i - cClickedline) - (j - (mPreviousline * i) - cPreviousline))) < 0)
 							{
 								return true;
 							}
@@ -92,71 +103,54 @@ namespace GpsGate
 			return false;
 		}
 
-		private float[] GetLineEquationConstants(Point clickedPoint1, Point clickedPoint2)
+		private double[] GetLineEquationConstants(Point clickedPoint1, Point clickedPoint2)
 		{
-			var constantArray = new float[2];
+			var constantArray = new Double[2];
 
 			// following y=mx+c equation where m=(change in y)/(change in x) and c=y-mx for any point on the line
-			var m = (float)(clickedPoint1.Y - clickedPoint2.Y) / (float)(clickedPoint1.X - clickedPoint2.X);
+			var m = ((double)(clickedPoint1.Y - clickedPoint2.Y) / (double)(clickedPoint1.X - clickedPoint2.X));
 			constantArray[0] = m;
-			var c = (float)(clickedPoint1.Y - (m * (float)(clickedPoint1.X)));
+			var c = clickedPoint1.Y - (double)((double)m * (clickedPoint1.X));
 			constantArray[1] = c;
 			return constantArray;
 		}
-		//public List<Point> GetAllPointsForDrawnLines(Point p, Point q)
-		//{
-		//	var pointlist = new List<Point>();
-		//	var lineConstantValues = GetLineEquationConstants(new Point { X = p.X, Y = p.Y }, new Point { X = q.X, Y = q.Y });
-		//	var m = lineConstantValues[0];
-		//	var c = lineConstantValues[1];
-		//	if (p.X < q.X)
-		//	{
-		//		for (int i = p.X; i <= q.X; i++)
-		//		{
-		//			var y = m * i + c;
-		//			int y1;
-		//			try
-		//			{
-		//				y1 = Convert.ToInt32(y);
-		//			}
-		//			catch (Exception e)
-		//			{
-		//				y1 = 1;
-		//			}
-		//			pointlist.Add(new Point
-		//			{
-		//				X = i,
-		//				Y = y1
-		//			});
-		//		}
-
-		//	}
-		//	else
-		//	{
-		//		for (int i = q.X; i <= p.X; i++)
-		//		{
-		//			var y = m * i + c;
-		//			int y1;
-		//			try
-		//			{
-		//				y1 = Convert.ToInt32(y);
-		//			}
-		//			catch (Exception e)
-		//			{
-		//				y1 = 1;
-		//			}
-		//			pointlist.Add(new Point
-		//			{
-		//				X = i,
-		//				Y = y1
-		//			});
-		//		}
-		//	}
-		//	return pointlist.OrderByDescending(r => r.X).ToList();
-		//}
 
 
-		
+		private bool Sorting(int upperX, int lowerX, int upperY, int lowerY)
+		{
+			for (int i = lowerX; i <= upperX; i++)
+			{
+				for (int j = lowerY; j <= upperY; j++)
+				{
+					if (((int)(j - (mClickedline * i) - cClickedline) - (int)(j - (mPreviousline * i) - cPreviousline)) == 0)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		private static double Convertdouble(double x)
+		{
+			var floatstring = x.ToString(CultureInfo.InvariantCulture);
+			var firstpart = floatstring.Split('.').FirstOrDefault();
+			var lastpart = floatstring.Split('.').Last();
+			if (string.IsNullOrEmpty(lastpart))
+			{
+				lastpart = "00";
+			}
+			else
+			{
+				lastpart = lastpart.Substring(0, 1);
+			}
+			var newstring = string.Format("{0}.{1}", firstpart, lastpart);
+			return double.Parse(newstring, CultureInfo.InvariantCulture);
+
+		}
+
+
+
 	}
 
 }
