@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -35,8 +36,9 @@ namespace DrawLineOnmouse
 				{
 					//add selected point to current points list and try to draw the line
 					AddPointToCurrentList(e.Location);
+					var x = CurrentPointsList.OrderBy(r => r.X).ToArray();
 					//check if not intersects
-					if (!IsIntersects(CurrentPointsList[0], CurrentPointsList[1]))
+					if (!IsIntersects(x[0], x[1]))
 					{
 						PointDictionary.Add(CurrentPointsList[0], CurrentPointsList[1]);
 						Refresh();
@@ -51,6 +53,8 @@ namespace DrawLineOnmouse
 		}
 		protected override void OnPaint(PaintEventArgs e)
 		{
+			e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
 			foreach (var v in PointDictionary)
 			{
 				e.Graphics.DrawLine(SystemPens.ControlDarkDark, v.Key, v.Value);
@@ -59,12 +63,10 @@ namespace DrawLineOnmouse
 			base.OnPaint(e);
 			CurrentPointsList.Clear();
 		}
-
 		private void AddPointToCurrentList(Point pointClicked)
 		{
 			CurrentPointsList.Add(pointClicked);
 		}
-
 		public bool IsIntersects(Point a, Point b)
 		{
 			List<Point> pointListsForDrawnLine = new List<Point>();
@@ -144,14 +146,14 @@ namespace DrawLineOnmouse
 				for (int i = p.X; i <= q.X; i++)
 				{
 					var y = m * i + c;
-					int y1=0;
+					int y1;
 					try
 					{
 						y1 = Convert.ToInt32(y);
 					}
 					catch (Exception e)
 					{
-						throw new Exception("can not convert to int for {0}",e.InnerException);
+						y1 = 0;
 					}
 					pointlist.Add(new Point
 					{
@@ -166,14 +168,14 @@ namespace DrawLineOnmouse
 				for (int i = q.X; i <= p.X; i++)
 				{
 					var y = m * i + c;
-					int y1=0;
+					int y1;
 					try
 					{
 						y1 = Convert.ToInt32(y);
 					}
 					catch (Exception e)
 					{
-						throw new Exception("can not convert to int for {0}",e.InnerException);
+						y1 = 0;
 					}
 					pointlist.Add(new Point
 					{
@@ -184,7 +186,6 @@ namespace DrawLineOnmouse
 			}
 			return pointlist.OrderByDescending(r=>r.X).ToList();
 		}
-
 		private bool Sorting(int upperX, int lowerX, int upperY, int lowerY, List<Point> pointListsForDrawnLine)
 		{
 			for (int i = lowerX; i <= upperX; i++)
@@ -199,7 +200,6 @@ namespace DrawLineOnmouse
 			}
 			return false;
 		}
-
 		private bool IsLinesParallel(Point a,Point b,Point p,Point q)
 		{
 			var constants1 = GetLineEquationConstants(a, b);
