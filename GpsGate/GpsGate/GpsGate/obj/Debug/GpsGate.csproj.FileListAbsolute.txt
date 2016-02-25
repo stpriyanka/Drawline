@@ -8,3 +8,13 @@ C:\Users\aarif\Desktop\GpsGate\GpsGate\GpsGate\obj\Debug\GpsGate.csproj.Generate
 C:\Users\aarif\Desktop\GpsGate\GpsGate\GpsGate\obj\Debug\GpsGate.exe
 C:\Users\aarif\Desktop\GpsGate\GpsGate\GpsGate\obj\Debug\GpsGate.pdb
 C:\Users\aarif\Desktop\GpsGate\GpsGate\GpsGate\obj\Debug\GpsGate.GpsGateForm.resources
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\GpsGate\GpsGate\GpsGate\bin\Debug\GpsGate.exe.config
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\GpsGate\GpsGate\GpsGate\bin\Debug\GpsGate.exe
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\GpsGate\GpsGate\GpsGate\bin\Debug\GpsGate.pdb
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\GpsGate\GpsGate\GpsGate\obj\Debug\GpsGate.csprojResolveAssemblyReference.cache
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\GpsGate\GpsGate\GpsGate\obj\Debug\GpsGate.GpsGate.resources
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\GpsGate\GpsGate\GpsGate\obj\Debug\GpsGate.GpsGateForm.resources
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\GpsGate\GpsGate\GpsGate\obj\Debug\GpsGate.Properties.Resources.resources
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\GpsGate\GpsGate\GpsGate\obj\Debug\GpsGate.csproj.GenerateResource.Cache
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\GpsGate\GpsGate\GpsGate\obj\Debug\GpsGate.exe
+C:\Users\arif\Desktop\important\pri\git_projects\DrawLines\GpsGate\GpsGate\GpsGate\obj\Debug\GpsGate.pdb
