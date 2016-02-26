@@ -58,7 +58,7 @@
       <DependentUpon>GpsGateForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ICalculationSettings.cs" />
-    <Compile Include="IPointLists.cs" />
+    <Compile Include="PointLists.cs" />
     <Compile Include="LineEquation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

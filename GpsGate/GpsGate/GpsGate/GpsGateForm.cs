@@ -11,18 +11,15 @@ using System.Windows.Forms;
 
 namespace GpsGate
 {
-	public partial class GpsGateForm : Form, IPointLists
+	public partial class GpsGateForm : Form
 	{
-
-		public IList<Point> CurrentPointsList { get; set; }
-		public Dictionary<Point, Point> PointDictionary { get; set; }
-		public Point Start { get; set; }
-		public Point End { get; set; }
+		private PointLists _pointListsDepo;
+		public static Point firstClickedPoint { get; set; }
+		
 		public GpsGateForm()
 		{
 			InitializeComponent();
-			CurrentPointsList = new List<Point>();
-			PointDictionary = new Dictionary<Point, Point>();
+			_pointListsDepo = new PointLists();
 		}
 
 		private void OnMouseClick(object sender, MouseEventArgs e)
@@ -35,14 +32,14 @@ namespace GpsGate
 		}
 		private void AddPointToCurrentList(Point pointClicked)
 		{
-			if (!CurrentPointsList.Any())
+			if (firstClickedPoint.X == 0 && firstClickedPoint.Y == 0)
 			{
-				CurrentPointsList.Add(pointClicked);
+				firstClickedPoint = pointClicked;
 			}
 			else
 			{
-				CurrentPointsList.Add(pointClicked);
-				CurrentPointsList = CurrentPointsList.OrderByDescending(r => r.X).ToList();
+				_pointListsDepo.CurrentPointsDictionary.Add(firstClickedPoint,pointClicked);
+				_pointListsDepo.CurrentPointsDictionary.OrderByDescending(r => r.Key.X).ToList();
 				DrawCurrentLine();
 			}
 		}
@@ -51,42 +48,47 @@ namespace GpsGate
 
 			if (!IsCurrentlineIntersects())
 			{
-				if (CurrentPointsList.Count == 2)
+				if (_pointListsDepo.CurrentPointsDictionary.Count == 1)
 				{
-					PointDictionary.Add(CurrentPointsList[0], CurrentPointsList[1]);
+					_pointListsDepo.PointDictionary.Add(_pointListsDepo.CurrentPointsDictionary.Keys.FirstOrDefault(),
+						_pointListsDepo.CurrentPointsDictionary.Values.FirstOrDefault());
 				}
 				Refresh();
 			}
 			else
 			{
-				CurrentPointsList.Clear();
+				_pointListsDepo.CurrentPointsDictionary.Clear();
 			}
 		}
 		private bool IsCurrentlineIntersects()
 		{
-			Start = CurrentPointsList[0];
-			End = CurrentPointsList[1];
-			foreach (var line in PointDictionary.OrderByDescending(r => r.Key.X))
+			foreach (var p in _pointListsDepo.PointDictionary.OrderByDescending(r => r.Key.X))
 			{
-				var calculation = new Calculation(Start, End, line.Key, line.Value);
+				var calculation = new Calculation(_pointListsDepo.CurrentPointsDictionary.Keys.FirstOrDefault(), _pointListsDepo.CurrentPointsDictionary.Values.FirstOrDefault(), p.Key, p.Value);
 				if (calculation.IsIntersects())
 				{
 					return true;
 				}
-
+				
 			}
+
+			
 			return false;
 		}
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-			foreach (var p in PointDictionary.OrderByDescending(r => r.Key.X))
+			if (_pointListsDepo.PointDictionary != null)
 			{
-				e.Graphics.DrawLine(SystemPens.ControlDarkDark, p.Key, p.Value);
+				foreach (var p in _pointListsDepo.PointDictionary.OrderByDescending(r => r.Key.X))
+				{
+					e.Graphics.DrawLine(SystemPens.ControlDarkDark, p.Key, p.Value);
+				}
+				_pointListsDepo.CurrentPointsDictionary.Clear();
 			}
-			CurrentPointsList.Clear();
 			base.OnPaint(e);
 		}
 
+	
 	}
 }
