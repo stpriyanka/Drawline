@@ -13,13 +13,13 @@ namespace GpsGate
 {
 	public partial class GpsGateForm : Form
 	{
-		private PointLists _pointListsDepo;
+		private PointDictionaries _pointListsDepo;
 		public static Point firstClickedPoint { get; set; }
 		
 		public GpsGateForm()
 		{
 			InitializeComponent();
-			_pointListsDepo = new PointLists();
+			_pointListsDepo = new PointDictionaries();
 		}
 
 		private void OnMouseClick(object sender, MouseEventArgs e)
@@ -32,63 +32,60 @@ namespace GpsGate
 		}
 		private void AddPointToCurrentList(Point pointClicked)
 		{
-			if (firstClickedPoint.X == 0 && firstClickedPoint.Y == 0)
+			if (firstClickedPoint.X == 0 && firstClickedPoint.Y== 0)
 			{
 				firstClickedPoint = pointClicked;
 			}
 			else
 			{
-				_pointListsDepo.CurrentPointsDictionary.Add(firstClickedPoint,pointClicked);
-				_pointListsDepo.CurrentPointsDictionary.OrderByDescending(r => r.Key.X).ToList();
+				if (_pointListsDepo != null)
+				{
+					_pointListsDepo.CurrentPointsDictionary.Add(firstClickedPoint,pointClicked);
+					_pointListsDepo.CurrentPointsDictionary.OrderByDescending(r => r.Key.X).ToList();
+				}
 				DrawCurrentLine();
 			}
 		}
 		private void DrawCurrentLine()
 		{
-
 			if (!IsCurrentlineIntersects())
 			{
 				if (_pointListsDepo.CurrentPointsDictionary.Count == 1)
 				{
-					_pointListsDepo.PointDictionary.Add(_pointListsDepo.CurrentPointsDictionary.Keys.FirstOrDefault(),
+					_pointListsDepo.OldPointsDictionary.Add(_pointListsDepo.CurrentPointsDictionary.Keys.FirstOrDefault(),
 						_pointListsDepo.CurrentPointsDictionary.Values.FirstOrDefault());
 				}
 				Refresh();
 			}
 			else
 			{
-				_pointListsDepo.CurrentPointsDictionary.Clear();
+				_pointListsDepo.CurrentPointsDictionary=new Dictionary<Point, Point>();
 			}
 		}
 		private bool IsCurrentlineIntersects()
 		{
-			foreach (var p in _pointListsDepo.PointDictionary.OrderByDescending(r => r.Key.X))
+			foreach (var p in _pointListsDepo.OldPointsDictionary.OrderByDescending(r => r.Key.X))
 			{
 				var calculation = new Calculation(_pointListsDepo.CurrentPointsDictionary.Keys.FirstOrDefault(), _pointListsDepo.CurrentPointsDictionary.Values.FirstOrDefault(), p.Key, p.Value);
 				if (calculation.IsIntersects())
 				{
 					return true;
 				}
-				
 			}
-
-			
 			return false;
 		}
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-			if (_pointListsDepo.PointDictionary != null)
+			if (_pointListsDepo.OldPointsDictionary != null)
 			{
-				foreach (var p in _pointListsDepo.PointDictionary.OrderByDescending(r => r.Key.X))
+				foreach (var p in _pointListsDepo.OldPointsDictionary.OrderByDescending(r => r.Key.X))
 				{
 					e.Graphics.DrawLine(SystemPens.ControlDarkDark, p.Key, p.Value);
 				}
-				_pointListsDepo.CurrentPointsDictionary.Clear();
+				_pointListsDepo.CurrentPointsDictionary=new Dictionary<Point, Point>();
 			}
 			base.OnPaint(e);
 		}
-
-	
 	}
 }
