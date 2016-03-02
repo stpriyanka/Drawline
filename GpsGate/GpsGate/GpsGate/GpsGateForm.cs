@@ -13,9 +13,9 @@ namespace GpsGate
 {
 	public partial class GpsGateForm : Form
 	{
-		private PointDictionaries _pointListsDepo;
+		public PointDictionaries _pointListsDepo { get; set; }
 		public static Point firstClickedPoint { get; set; }
-		
+
 		public GpsGateForm()
 		{
 			InitializeComponent();
@@ -32,7 +32,7 @@ namespace GpsGate
 		}
 		private void AddPointToCurrentList(Point pointClicked)
 		{
-			if (firstClickedPoint.X == 0 && firstClickedPoint.Y== 0)
+			if (firstClickedPoint == default(Point))
 			{
 				firstClickedPoint = pointClicked;
 			}
@@ -40,42 +40,52 @@ namespace GpsGate
 			{
 				if (_pointListsDepo != null)
 				{
-					_pointListsDepo.CurrentPointsDictionary.Add(firstClickedPoint,pointClicked);
+					_pointListsDepo.CurrentPointsDictionary.Add(firstClickedPoint, pointClicked);
 					_pointListsDepo.CurrentPointsDictionary.OrderByDescending(r => r.Key.X).ToList();
 				}
 				DrawCurrentLine();
 			}
 		}
-		private void DrawCurrentLine()
+		public void DrawCurrentLine()
 		{
 			if (!IsCurrentlineIntersects())
 			{
-				if (_pointListsDepo.CurrentPointsDictionary.Count == 1)
+				foreach (var p in _pointListsDepo.CurrentPointsDictionary)
 				{
-					_pointListsDepo.OldPointsDictionary.Add(_pointListsDepo.CurrentPointsDictionary.Keys.FirstOrDefault(),
-						_pointListsDepo.CurrentPointsDictionary.Values.FirstOrDefault());
+					_pointListsDepo.OldPointsDictionary.Add(p.Key, p.Value);
 				}
-				
-				_pointListsDepo.CurrentPointsDictionary = new Dictionary<Point, Point>();
 				firstClickedPoint = new Point();
 				Refresh();
 			}
 			else
 			{
-				_pointListsDepo.CurrentPointsDictionary=new Dictionary<Point, Point>();
+				foreach (var p in _pointListsDepo.CurrentPointsDictionary)
+				{
+					foreach (var x in _pointListsDepo.CurrentPointsDictionary)
+					{
+						BreakLineIntoParts(x.Key, x.Value, p.Key, p.Value);
+					}
+				}
+				firstClickedPoint = new Point();
+				_pointListsDepo.CurrentPointsDictionary.Clear();
 			}
 		}
 		private bool IsCurrentlineIntersects()
 		{
+			bool isintersect = false;
 			foreach (var p in _pointListsDepo.OldPointsDictionary.OrderByDescending(r => r.Key.X))
 			{
-				var calculation = new Calculation(_pointListsDepo.CurrentPointsDictionary.Keys.FirstOrDefault(), _pointListsDepo.CurrentPointsDictionary.Values.FirstOrDefault(), p.Key, p.Value);
-				if (calculation.IsIntersects())
+				var p1 = p;
+				Task.Run(() =>
 				{
-					return true;
-				}
+					foreach (var currentpoint in _pointListsDepo.CurrentPointsDictionary)
+					{
+						var calculation = new Calculation(currentpoint.Key, currentpoint.Value, p1.Key, p1.Value);
+						calculation.IsIntersects();
+					}
+				}).Wait();
 			}
-			return false;
+			return isintersect;
 		}
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -86,9 +96,16 @@ namespace GpsGate
 				{
 					e.Graphics.DrawLine(SystemPens.ControlDarkDark, p.Key, p.Value);
 				}
-				_pointListsDepo.CurrentPointsDictionary=new Dictionary<Point, Point>();
+				_pointListsDepo.CurrentPointsDictionary.Clear();
 			}
 			base.OnPaint(e);
+		}
+
+		public void BreakLineIntoParts(Point a, Point b, Point p, Point q)
+		{
+			_pointListsDepo.CurrentPointsDictionary.Add(a, new Point(b.X + 1, b.Y));
+			_pointListsDepo.CurrentPointsDictionary.Add(new Point(b.X + 1, b.Y), b);
+			DrawCurrentLine();
 		}
 	}
 }
