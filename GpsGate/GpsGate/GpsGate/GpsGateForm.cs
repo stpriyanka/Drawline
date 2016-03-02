@@ -55,6 +55,9 @@ namespace GpsGate
 					_pointListsDepo.OldPointsDictionary.Add(_pointListsDepo.CurrentPointsDictionary.Keys.FirstOrDefault(),
 						_pointListsDepo.CurrentPointsDictionary.Values.FirstOrDefault());
 				}
+				
+				_pointListsDepo.CurrentPointsDictionary = new Dictionary<Point, Point>();
+				firstClickedPoint = new Point();
 				Refresh();
 			}
 			else
